@@ -40,8 +40,8 @@ var UpdateForm = React.createClass({
 	},
 	getFieldProps (field) {
 		var props = Object.assign({}, field);
-		props.value = this.state.fields[field.path];
-		props.values = this.state.fields;
+		props.value = this.props.list.fields[field.path];
+		props.values = this.props.list.fields;
 		props.onChange = this.handleChange;
 		props.mode = 'create';
 		props.key = field.path;
@@ -54,8 +54,13 @@ var UpdateForm = React.createClass({
 			ReactDOM.findDOMNode(this.refs.focusTarget).focus();
 		});
 	},
-	handleChange (value) {
-		console.log('handleChange:', value);
+	handleChange (evt) {
+		this.setState({
+			fields: {
+				...this.state.fields,
+				[evt.path]: evt.value,
+			},
+		});
 	},
 	handleClose () {
 		this.setState({
@@ -118,6 +123,7 @@ var UpdateForm = React.createClass({
 		);
 	},
 	render () {
+		console.log(this.state, this.props);
 		return (
 			<Modal isOpen={this.props.isOpen} onCancel={this.handleClose} backdropClosesModal>
 				{this.renderForm()}
